@@ -3,12 +3,12 @@ html {
 	background-color: #000;
     font-size: 1em;
     line-height: 1.4;
+    font-family: monospace;
 }
 
 
 .computer-name {
 	color: #00ff00;
-	font-family: monospace;
 }
 
 

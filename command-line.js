@@ -20,24 +20,29 @@
 
 	}
 
-	$.fn.commandLine = function(){
+	$.fn.commandLine = function( inputEle ){
 	
 		var tempCommandStr = "";
 		var command;
 
 		var commandE = this; //Store the element to jQuery plugin is called, since this is overrided
 
-		$("body").keypress(function(e){
+		// Listen to two events because keypress can't capture Backspace key 
+		// and Keyup can't capture the case of pressed key.
+		$("body").on('keyup keypress ', function(e){
 
 			//if "Enter" is pressed, process command
-			if(e.charCode === 13)
+			if(e.keyCode === 13)
 			{
 				command = tempCommandStr;
 				tempCommandStr = "";
 				processCommand( command );
+			} else if( e.keyCode === 8 ) {
+				tempCommandStr = tempCommandStr.slice(0, -2);
+			} else {
+				tempCommandStr += String.fromCharCode( e.charCode  );				
 			}
 
-			tempCommandStr += String.fromCharCode( e.charCode );
 			$(commandE).text( tempCommandStr );
 		});
 	}
