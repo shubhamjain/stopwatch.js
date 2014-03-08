@@ -7,6 +7,7 @@ var stopwatch = {
 	splitDiff: 0,
 	splits: 0,
 	output: "",
+	intervalId: null,
 
 	toFormat: function( miliseconds )
 	{
@@ -32,13 +33,16 @@ var stopwatch = {
 	init: function()
 	{
 		this.splitArr = new Array();
+		this.timeElapsed = 0;
+		this.splitDiff = 0;
+		this.splits = 0;
 
 		this.output = "Press q to exit and Spacebar to split.\r\n\r\n";
 		this.output += "# \t Time Elapsed \t Split Difference\r\n";
 		this.output += "-----------------------------------------\r\n";
 
 		var contxt = this;
-		setInterval( function(){
+		this.intervalId = setInterval( function(){
 			contxt.timeElapsed += 10;
 		}, 10);
 	},
