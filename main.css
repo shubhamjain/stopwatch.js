@@ -16,6 +16,7 @@ html {
 @keyframes blink
 {
 	0% {opacity: 1.0}
+	20% {opacity: 0.0}
 	100% {opacity: 0.0}
 }
 
@@ -26,8 +27,16 @@ html {
 	100% {opacity: 0.0}
 }
 
+@-moz-keyframes blink
+{
+	0% {opacity: 1.0}
+	20% {opacity: 0.0}
+	100% {opacity: 0.0}
+}
+
 .blinking-cursor {
-	animation: blink 1s;
-	-webkit-animation: blink .8s steps(3) 0 infinite;
+	animation: blink .8s steps(3) 0s infinite;
+	-moz-animation: blink .8s steps(3) 0s infinite;
+	-webkit-animation: blink .8s steps(3) 0s infinite;
 	font-size: 10pt;
 }
