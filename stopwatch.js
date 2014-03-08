@@ -1,4 +1,6 @@
 var stopwatch = {
+	QUIT: 2,
+
 	isContinuous: true, /* Does the command shows output continously or prints and exits */
 	timeElapsed: 0,
 	splitDiffArr: null,
@@ -17,6 +19,14 @@ var stopwatch = {
 		}, 10);
 	},
 
+	keyAction: function( charCode )
+	{
+		if( charCode === 81 )
+			return QUIT; //Send QUIT if "q" is pressed
+		else if ( charCode === 32 )
+			this.split();
+	},
+
 	split: function()
 	{
 		this.splitArr.push( this.timeElapsed );
@@ -29,5 +39,10 @@ var stopwatch = {
 	updateOutput: function()
 	{	
 		this.output += this.splits + " \t\t " + this.toFormat( this.timeElapsed[this.splits] ) + "\t\t" + this.toFormat( this.splitArr[this.splits] ) + "\n";
+	},
+
+	show: function()
+	{
+		return this.output + "\n" + toFormat( this.timeElapsed );
 	}
 }
