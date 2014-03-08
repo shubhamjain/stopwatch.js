@@ -5,7 +5,33 @@
 	var commandInterval;
 	var QUIT = 2;
 
-	function processCommand( command, outputEle )
+	function bodyEventListner( opts )
+	{
+
+		var commandStr = "";
+
+		// Listen to two events because keypress can't capture Backspace key 
+		// and Keyup can't capture the case of pressed key.
+		$("body").on('keyup keypress', function(e){
+
+			//Don't process input key if another command is still in progress
+			if( ! isProcessing )
+				//if "Enter" is pressed, process command				
+				if(e.charCode === 13)
+				{
+					processCommand( commandStr, opts, this );				
+					commandStr = "";
+				} else if( e.keyCode === 8 ) {
+					commandStr = commandStr.slice(0, -2);
+				} else if( e.charCode ){
+					commandStr += String.fromCharCode( e.charCode  );				
+				}
+
+			$( "."+opts.commandTextClass ).text( commandStr );
+		});
+	}
+
+	function processCommand( command, opts, commandsEle )
 	{
 		var commandName;
 		var commandArgs;
@@ -26,11 +52,22 @@
 					if( commandObj.keyAction( e.charCode ) === QUIT )
 					{
 						clearInterval( commandInterval );
+						clearInterval( commandObj.intervalId );
+						isProcessing = false;
+
+						$(commandsEle).find("*").each(function(){
+							$(this).removeClass();
+						}); 
+
+						$("body").unbind("keypress keyup");
+						bodyEventListner( opts );
+
+						$(commandsEle).append( nano(opts.commandRowTemplate, opts) );
 					}
 				});
 
 				commandInterval = setInterval( function(){
-					$(outputEle).html( commandObj.show() )
+					$(opts.outputEle).html( commandObj.show() )
 				}, 100);
 			}
 				
@@ -48,48 +85,29 @@
 	    	for (var i = 0, l = keys.length; i < l; i++) v = v[keys[i]];
 	    	return (typeof v !== "undefined" && v !== null) ? v : "";
 		});
-	}
+	}	
 
 	$.fn.commandLine = function( args ){
 
-		var defaults = {
-			outputEle: "pre.output", 		//Element in which the output is to be shown
-			commandRowClass: "command-row", //Class of a new command line inserted ater command finished executing
-			commandTextClass: "command-text", //Class of a new command line inserted ater command finished executing
-			username: "Guest",			
-			computerName: "localhost",
-			blinkingCursorClass: "blinking-cursor", //Used to destroy blinking cursor after command finished exceucting
-			commandRowTemplate: '<div class="command-row"> \
-					                <span class="computer-name">{username}@{computerName}:~$</span> \
-					                <span class="{commandTextClass}"></span><span class="{blinkingCursorClass}">&#9608;</span> \
-					            </div> \
-					            <pre class="output"></pre> \
-					            </div>'
-		}
-
-		var opts = $.extend({}, defaults, args);
+		var opts = $.extend({}, $.fn.commandLine.defaults, args);
 	
 		this.html( nano(opts.commandRowTemplate, opts) ); //Construct the default template
 
-		var commandStr = "";
+		bodyEventListner( opts );
+	};
 
-		// Listen to two events opts keypress can't capture Backspace key 
-		// and Keyup can't capture the case of pressed key.
-		$("body").on('keyup keypress', function(e){
-
-			if( ! isProcessing )
-				//if "Enter" is pressed, process command				
-				if(e.charCode === 13)
-				{
-					processCommand( commandStr, opts.outputEle );				
-					commandStr = "";
-				} else if( e.keyCode === 8 ) {
-					tempCommandStr = tempCommandStr.slice(0, -2);
-				} else if( e.charCode ){
-					commandStr += String.fromCharCode( e.charCode  );				
-				}
-
-			$( "."+defaults.commandTextClass ).text( commandStr );
-		});
+	$.fn.commandLine.defaults = {
+		outputEle: "pre.output", 		//Element in which the output is to be shown
+		commandRowClass: "command-row", //Class of a new command line inserted ater command finished executing
+		commandTextClass: "command-text", //Class of a new command line inserted ater command finished executing
+		username: "Guest",			
+		computerName: "localhost",
+		blinkingCursorClass: "blinking-cursor", //Used to destroy blinking cursor after command finished exceucting
+		commandRowTemplate: '<div class="command-row"> \
+				                <span class="computer-name">{username}@{computerName}:~$</span> \
+				                <span class="{commandTextClass}"></span><span class="{blinkingCursorClass}">&#9608;</span> \
+				            </div> \
+				            <pre class="output"></pre> \
+				            </div>'
 	}
 })(jQuery);
