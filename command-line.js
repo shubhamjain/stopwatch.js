@@ -1,8 +1,11 @@
 (function($){
 
 	var commandObj = null;
+	var isProcessing = false;
+	var commandInterval;
+	var QUIT = 2;
 
-	function processCommand( command )
+	function processCommand( command, outputEle )
 	{
 		var commandName;
 		var commandArgs;
@@ -14,13 +17,30 @@
 		{
 			commandObj = window[commandName];
 			commandObj.init();
+
+			isProcessing = true;
+
+			if( commandObj.isContinuous )
+			{
+				$("body").on('keypress', function(e){
+					if( commandObj.keyAction( e.charCode ) === QUIT )
+					{
+						clearInterval( commandInterval );
+					}
+				});
+
+				commandInterval = setInterval( function(){
+					$(outputEle).html( commandObj.show() )
+				}, 100);
+			}
+				
 		} else {
 			return false;
 		}
 
 	}
 
-	$.fn.commandLine = function( inputEle ){
+	$.fn.commandLine = function( outputEle ){
 	
 		var tempCommandStr = "";
 		var command;
@@ -29,19 +49,20 @@
 
 		// Listen to two events because keypress can't capture Backspace key 
 		// and Keyup can't capture the case of pressed key.
-		$("body").on('keyup keypress ', function(e){
+		$("body").on('keyup keypress', function(e){
 
-			//if "Enter" is pressed, process command
-			if(e.keyCode === 13)
-			{
-				command = tempCommandStr;
-				tempCommandStr = "";
-				processCommand( command );
-			} else if( e.keyCode === 8 ) {
-				tempCommandStr = tempCommandStr.slice(0, -2);
-			} else {
-				tempCommandStr += String.fromCharCode( e.charCode  );				
-			}
+			if( ! isProcessing )
+				//if "Enter" is pressed, process command				
+				if(e.charCode === 13)
+				{
+					command = tempCommandStr;
+					processCommand( command, outputEle );				
+					tempCommandStr = "";
+				} else if( e.keyCode === 8 ) {
+					tempCommandStr = tempCommandStr.slice(0, -2);
+				} else if( e.charCode ){
+					tempCommandStr += String.fromCharCode( e.charCode  );				
+				}
 
 			$(commandE).text( tempCommandStr );
 		});
