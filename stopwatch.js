@@ -1,5 +1,5 @@
 var stopwatch = {
-	QUIT: 2,
+	QUIT: 2, //constant to signal terminating running command.
 
 	isContinuous: true, /* Does the command shows output continously or prints and exits */
 	timeElapsed: 0,
@@ -31,10 +31,10 @@ var stopwatch = {
 
 	init: function()
 	{
-		this.splitDiffArr = new Array();
 		this.splitArr = new Array();
 
-		this.output = "# \t Time Elapsed \t Split Difference\r\n";
+		this.output = "Press q to exit and Spacebar to split.\r\n\r\n";
+		this.output += "# \t Time Elapsed \t Split Difference\r\n";
 		this.output += "-----------------------------------------\r\n";
 
 		var contxt = this;
@@ -45,8 +45,8 @@ var stopwatch = {
 
 	keyAction: function( charCode )
 	{
-		if( charCode === 81 )
-			return QUIT; //Send QUIT if "q" is pressed
+		if( charCode === 113 )
+			return this.QUIT; //Send QUIT if "q" is pressed
 		else if ( charCode === 32 )
 			this.split();
 	},
