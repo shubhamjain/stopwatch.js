@@ -42,8 +42,7 @@
 
 	$.fn.commandLine = function( outputEle ){
 	
-		var tempCommandStr = "";
-		var command;
+		var commandStr = "";
 
 		var commandE = this; //Store the element to jQuery plugin is called, since this is overrided
 
@@ -55,16 +54,15 @@
 				//if "Enter" is pressed, process command				
 				if(e.charCode === 13)
 				{
-					command = tempCommandStr;
-					processCommand( command, outputEle );				
-					tempCommandStr = "";
+					processCommand( commandStr, outputEle );				
+					commandStr = "";
 				} else if( e.keyCode === 8 ) {
 					tempCommandStr = tempCommandStr.slice(0, -2);
 				} else if( e.charCode ){
-					tempCommandStr += String.fromCharCode( e.charCode  );				
+					commandStr += String.fromCharCode( e.charCode  );				
 				}
 
-			$(commandE).text( tempCommandStr );
+			$(commandE).text( commandStr );
 		});
 	}
 })(jQuery);
