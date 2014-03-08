@@ -3,19 +3,43 @@ var stopwatch = {
 
 	isContinuous: true, /* Does the command shows output continously or prints and exits */
 	timeElapsed: 0,
-	splitDiffArr: null,
+	splitArr: null,
+	splitDiff: 0,
 	splits: 0,
 	output: "",
 
+	toFormat: function( miliseconds )
+	{
+		formatArr = {
+			"d": 24 * 60 * 60 * 1000,
+			"h": 60 * 60 * 1000,
+			"m": 60 * 1000,
+			"s": 1000,
+			"ms": 1
+		}
+
+		var timeStr = "";
+		$.each( formatArr, function( index, val) {
+			if( Math.floor(timeUnit = miliseconds / val) )
+			{
+				timeStr += Math.floor(timeUnit) + index + " "; 
+				miliseconds = miliseconds % val;
+			}
+		});
+		return timeStr;
+	},
+
 	init: function()
 	{
-		this.splitDiffArr = new Array(0);
+		this.splitDiffArr = new Array();
+		this.splitArr = new Array();
 
-		this.output = "# \t\t Time Elapsed\t\tSplit Difference\n";
-		this.output += "----------------------------------------";
+		this.output = "# \t Time Elapsed \t Split Difference\r\n";
+		this.output += "-----------------------------------------\r\n";
 
+		var contxt = this;
 		setInterval( function(){
-			this.timeElapsed += 10;
+			contxt.timeElapsed += 10;
 		}, 10);
 	},
 
@@ -30,7 +54,7 @@ var stopwatch = {
 	split: function()
 	{
 		this.splitArr.push( this.timeElapsed );
-		this.splitDiffArr.push( this.timeElapsed - this.splitDiffArr [this.splits])
+		this.splitDiff = this.timeElapsed - this.splitArr [this.splits - 1];
 		this.splits++;
 
 		this.updateOutput();
@@ -38,11 +62,11 @@ var stopwatch = {
 
 	updateOutput: function()
 	{	
-		this.output += this.splits + " \t\t " + this.toFormat( this.timeElapsed[this.splits] ) + "\t\t" + this.toFormat( this.splitArr[this.splits] ) + "\n";
+		this.output += this.splits + " \t " + this.toFormat( this.splitArr[this.splits - 1] ) + "\t" + this.toFormat( this.splitDiff ) + "\r\n";
 	},
 
 	show: function()
 	{
-		return this.output + "\n" + toFormat( this.timeElapsed );
+		return this.output + "\r\n" + this.toFormat( this.timeElapsed );
 	}
 }
