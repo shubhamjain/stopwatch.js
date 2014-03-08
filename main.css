@@ -1,0 +1,42 @@
+html {
+    color: #FFFFFF;
+	background-color: #000;
+    font-size: 1em;
+    line-height: 1.4;
+    font-family: monospace;
+}
+
+
+.computer-name {
+	color: #00ff00;
+}
+
+
+/* Blinking cursor */
+@keyframes blink
+{
+	0% {opacity: 1.0}
+	20% {opacity: 0.0}
+	100% {opacity: 0.0}
+}
+
+@-webkit-keyframes blink
+{
+	0% {opacity: 1.0}
+	20% {opacity: 0.0}
+	100% {opacity: 0.0}
+}
+
+@-moz-keyframes blink
+{
+	0% {opacity: 1.0}
+	20% {opacity: 0.0}
+	100% {opacity: 0.0}
+}
+
+.blinking-cursor {
+	animation: blink .8s steps(3) 0s infinite;
+	-moz-animation: blink .8s steps(3) 0s infinite;
+	-webkit-animation: blink .8s steps(3) 0s infinite;
+	font-size: 10pt;
+}
