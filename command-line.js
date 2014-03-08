@@ -1,5 +1,7 @@
 (function($){
 
+	var commandObj = null;
+
 	function processCommand( command )
 	{
 		var commandName;
@@ -7,11 +9,20 @@
 
 		commandName = command.split(' ')[0];
 		commandArgs = command.split(' ')[1];
+
+		if( typeof window[commandName] === "object")
+		{
+			commandObj = window[commandName];
+			commandObj.init();
+		} else {
+			return false;
+		}
+
 	}
 
 	$.fn.commandLine = function(){
 	
-		var tempCommandStr = null;
+		var tempCommandStr = "";
 		var command;
 
 		var commandE = this; //Store the element to jQuery plugin is called, since this is overrided
@@ -22,7 +33,7 @@
 			if(e.charCode === 13)
 			{
 				command = tempCommandStr;
-				tempCommandStr = null;
+				tempCommandStr = "";
 				processCommand( command );
 			}
 

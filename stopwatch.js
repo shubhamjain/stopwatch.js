@@ -1,4 +1,4 @@
-var Stopwatch = {
+var stopwatch = {
 	timeElapsed: null,
 	splitArr: null,
 
