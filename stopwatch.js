@@ -1,6 +1,6 @@
 var Stopwatch = {
-	var timeElapsed;
-	var splitArr;
+	timeElapsed: null,
+	splitArr: null,
 
 	init: function(){
 		this.timeElapsed = 0;
@@ -12,6 +12,6 @@ var Stopwatch = {
 	},
 
 	split: function(){
-		this.splitArr.push( this.timeElapsed )
+		this.splitArr.push( this.timeElapsed );
 	}
 }
