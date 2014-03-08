@@ -21,8 +21,8 @@
 				{
 					processCommand( commandStr, opts, this );				
 					commandStr = "";
-				} else if( e.keyCode === 8 ) {
-					commandStr = commandStr.slice(0, -2);
+				} else if( e.keyCode === 8 && e.type === "keyup" ) {
+					commandStr = commandStr.slice(0, -1);
 				} else if( e.charCode ){
 					commandStr += String.fromCharCode( e.charCode  );				
 				}
