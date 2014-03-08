@@ -17,7 +17,7 @@
 			//Don't process input key if another command is still in progress
 			if( ! isProcessing )
 				//if "Enter" is pressed, process command				
-				if(e.charCode === 13)
+				if(e.type === "keypress" && e.keyCode === 13)
 				{
 					processCommand( commandStr, opts, this );				
 					commandStr = "";
