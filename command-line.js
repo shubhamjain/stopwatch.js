@@ -37,7 +37,7 @@
 		var commandArgs;
 
 		commandName = command.split(' ')[0];
-		commandArgs = command.split(' ')[1];
+		commandArgs = command.split(' ')[1];	//Not yet implemented.
 
 		if( typeof window[commandName] === "object")
 		{
@@ -45,6 +45,7 @@
 			commandObj.init();
 
 			isProcessing = true;
+
 
 			if( commandObj.isContinuous )
 			{

@@ -1,7 +1,7 @@
 var stopwatch = {
 	QUIT: 2, //constant to signal terminating running command.
 
-	isContinuous: true, /* Does the command shows output continously or prints and exits */
+	isContinuous: true, // Does the command shows output continously or prints and exits
 	timeElapsed: 0,
 	splitArr: null,
 	splitDiff: 0,
@@ -9,6 +9,7 @@ var stopwatch = {
 	output: "",
 	intervalId: null,
 
+	//Converts miliseconds into a readable format.
 	toFormat: function( miliseconds )
 	{
 		formatArr = {
@@ -69,6 +70,7 @@ var stopwatch = {
 		this.output += this.splits + " \t " + this.toFormat( this.splitArr[this.splits - 1] ) + "\t" + this.toFormat( this.splitDiff ) + "\r\n";
 	},
 
+	//Returns the final output to be shown in page.
 	show: function()
 	{
 		return this.output + "\r\n" + this.toFormat( this.timeElapsed );
